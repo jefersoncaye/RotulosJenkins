@@ -2,20 +2,20 @@ from playwright.sync_api import expect
 import time
 
 def login(page, usuario, senha):
-    page.goto("http://cit/login",timeout=2000)
+    page.goto("http://cit/login",timeout=20000)
     page.get_by_placeholder("Nome do usuário").fill(usuario)
     page.get_by_placeholder("Senha").fill(senha)
     page.get_by_role("button", name="Entrar").click()
     time.sleep(2)
 
 def alteraRotuloMaquina(page, maquina, rotulo):
-    page.goto(f"http://cit/computer/{maquina}/configure", timeout=2000)
+    page.goto(f"http://cit/computer/{maquina}/configure", timeout=20000)
     page.wait_for_load_state()
     expect(page.locator("[class='setting-main']").locator("[name='_.labelString']")).to_be_visible()
     page.locator("[class='setting-main']").locator("[name='_.labelString']").fill(rotulo)
     page.get_by_role("button", name='Salvar').click()
     page.wait_for_load_state()
-    page.goto(f"http://cit/computer/{maquina}/configure", timeout=2000)
+    page.goto(f"http://cit/computer/{maquina}/configure", timeout=20000)
     page.wait_for_load_state()
     expect(page.locator("[class='setting-main']").locator("[name='_.labelString']")).to_have_value(rotulo)
 

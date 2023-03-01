@@ -1,6 +1,8 @@
 import requests
 from requests.auth import HTTPBasicAuth
 from bs4 import BeautifulSoup
+from httplib2 import Http
+from json import dumps
 
 
 def buscaPagina(url, usuario='', senha=''):
@@ -47,6 +49,26 @@ for maquina in listaMaquinas:
     dicionarioRotulos[maquina] = rotulosMaquina
 
 
-print('Gerenciador de VMs:')
+def enviaChat(urlWebhook, mensagem):
+    """Hangouts Chat incoming webhook quickstart."""
+    url = urlWebhook
+    bot_message = {
+        'text': mensagem}
+    message_headers = {'Content-Type': 'application/json; charset=UTF-8'}
+    http_obj = Http()
+    response = http_obj.request(
+        uri=url,
+        method='POST',
+        headers=message_headers,
+        body=dumps(bot_message),
+    )
+    print(response)
+
+
+mensagem = '*Gerenciador de VMs:*'
+
 for chave, valor in dicionarioRotulos.items():
-    print(f'{chave} --> {str(valor).strip("[]")}')
+    mensagem = mensagem + f'\n{chave} --> {str(valor).strip("[]")}'
+
+
+enviaChat('https://chat.googleapis.com/v1/spaces/AAAAvyOeY1o/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=kS4NB6yzuuUSig97Gw96-ArrfmOcHEJcxH4MR0J0m48%3D', mensagem)
